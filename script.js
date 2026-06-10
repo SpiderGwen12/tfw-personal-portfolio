@@ -1,6 +1,98 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     /* ==========================================================================
+       DYNAMIC HOBBIES INJECTION
+       ========================================================================== */
+    const hobbiesData = [
+        {
+            title: "Reading",
+            category: "Books I Cherish",
+            icon: `<svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20M4 19.5V3.5A2.5 2.5 0 0 1 6.5 1h13.5v16H6.5a2.5 2.5 0 0 0-2.5 2.5z" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            items: [
+                { name: "A Good Girl's Guide to Murder", url: "https://www.penguinrandomhouse.com/series/2G4/a-good-girls-guide-to-murder" },
+                { name: "Harry Potter", url: "https://www.wizardingworld.com" },
+                { name: "The Sherlock Holmes", url: "https://www.conandoyleestate.com/" }
+            ]
+        },
+        {
+            title: "Binge Watching",
+            category: "Shows I Love",
+            icon: `<svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none"><rect x="2" y="7" width="20" height="15" rx="2" ry="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="17 2 12 7 7 2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            items: [
+                { name: "Wednesday", url: "https://www.netflix.com/title/81231974" },
+                { name: "Stranger Things", url: "https://www.netflix.com/title/80057281" },
+                { name: "Just Add Magic", url: "https://www.amazon.com/dp/B00O9S4Z2S" }
+            ]
+        },
+        {
+            title: "Bharatanatyam",
+            category: "Classical Dance",
+            icon: `<svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            image: "bharatanatyam.png"
+        },
+        {
+            title: "Music",
+            category: "Melodies & Rhythms",
+            icon: `<svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6-3 3 3 0 0 1 6 3zm12-2a3 3 0 1 1-6-3 3 3 0 0 1 6 3z" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            items: [
+                { name: "Sweater Weather", url: "https://www.youtube.com/watch?v=GCdwMSWK_GE" },
+                { name: "Stay", url: "https://www.youtube.com/watch?v=kTJczUoc26U" },
+                { name: "Ain't Worried", url: "https://www.youtube.com/watch?v=mNEW1D9Yy9c" },
+                { name: "House of Memories", url: "https://www.youtube.com/watch?v=KuliCkN2oic" }
+            ]
+        }
+    ];
+
+    const hobbiesContainer = document.getElementById('hobbies-container');
+    if (hobbiesContainer) {
+        hobbiesData.forEach((hobby, index) => {
+            const card = document.createElement('div');
+            card.className = `hobby-card reveal reveal-delay-${(index % 4) + 1}`;
+            card.id = `hobby-card-${hobby.title.toLowerCase().replace(/\\s+/g, '-')}`;
+            
+            let bodyContent = '';
+            if (hobby.items) {
+                bodyContent = `
+                    <ul class="hobby-items-list">
+                        \${hobby.items.map(item => `
+                            <li>
+                                <a href="\${item.url}" target="_blank" rel="noopener noreferrer" class="hobby-item-link">
+                                    <span>\${item.name}</span>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="external-link-icon">
+                                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                                        <polyline points="7 7 17 7 17 17"></polyline>
+                                    </svg>
+                                </a>
+                            </li>
+                        \`).join('')}
+                    </ul>
+                `;
+            } else if (hobby.image) {
+                bodyContent = `
+                    <div class="hobby-image-container">
+                        <img src="\${hobby.image}" alt="Bharatanatyam Dancer" class="hobby-image" loading="lazy">
+                        <div class="hobby-image-overlay">
+                            <span>Traditional Classical Dance Form</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
+                <div class="hobby-header">
+                    <div class="hobby-icon-box">\${hobby.icon}</div>
+                    <span class="hobby-category">\${hobby.category}</span>
+                    <h3 class="hobby-title">\${hobby.title}</h3>
+                </div>
+                <div class="hobby-body">
+                    \${bodyContent}
+                </div>
+            `;
+            hobbiesContainer.appendChild(card);
+        });
+    }
+
+    /* ==========================================================================
        SCROLL INDICATORS & NAV STATE
        ========================================================================== */
     const header = document.getElementById('main-header');
